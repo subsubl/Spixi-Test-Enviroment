@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#0f1722" />
+      <stop offset="1" stop-color="#0b1220" />
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#g)"/>
+  <!-- Terminal window rounded -->
+  <rect x="32" y="48" rx="28" ry="28" width="448" height="416" fill="#0b1220" stroke="#213046" stroke-width="4"/>
+  <!-- Title bar -->
+  <rect x="40" y="64" rx="12" ry="12" width="432" height="56" fill="#071022" />
+  <circle cx="72" cy="92" r="7" fill="#ff5f57" />
+  <circle cx="96" cy="92" r="7" fill="#ffbd2e" />
+  <circle cx="120" cy="92" r="7" fill="#28c840" />
+
+  <!-- Terminal content: DOS label and prompt -->
+  <g transform="translate(56,150)">
+    <text x="0" y="0" font-family="monospace" font-size="64" fill="#00ff88" font-weight="700">DOS</text>
+    <rect x="0" y="40" width="380" height="4" fill="#00ff88" opacity="0.12" />
+    <text x="0" y="120" font-family="monospace" font-size="24" fill="#9fffc2">A:\>_</text>
+  </g>
+</svg>
