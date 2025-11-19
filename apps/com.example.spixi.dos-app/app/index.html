@@ -16,6 +16,7 @@
         <!-- Soft keyboard trigger (hidden) - focusing this will pop up mobile keyboards -->
         <!-- Disabled: previously had a hidden input and overlay keypad to trigger mobile keyboards; removed to prevent popups -->
     </div>
+    <div id="lan-status" class="lan-status" role="status" aria-live="polite">LAN sync offline</div>
     <div style="margin-top: 12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:center;">
         <select id="sample-bundles" style="padding:.5rem;border-radius:.375rem;border:1px solid #ccc;background:#fff;color:#111">
             <option value="https://v8.js-dos.com/bundles/digger.jsdos">Digger (js-dos sample)</option>
@@ -33,6 +34,8 @@
         // Set global js-dos theme default to dark; js-dos will pick it when Dos() is called.
         window.jsDosDefaultTheme = 'dark';
     </script>
+    <script src="js/spixi-app-sdk.js"></script>
+    <script src="js/spixi-tools.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

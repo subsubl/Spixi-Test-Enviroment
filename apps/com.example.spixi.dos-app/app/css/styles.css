@@ -13,6 +13,30 @@ h1 {
     margin-bottom: 20px;
 }
 
+.lan-status {
+    margin-bottom: 14px;
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.lan-status[data-mode="offline"] {
+    background: rgba(158, 41, 41, 0.22);
+    color: #ff9b9b;
+}
+
+.lan-status[data-mode="idle"] {
+    background: rgba(43, 58, 108, 0.24);
+    color: #a7baff;
+}
+
+.lan-status[data-mode="online"] {
+    background: rgba(27, 94, 32, 0.26);
+    color: #8fe1a8;
+}
+
 /* Main DOS area - responsive to viewport */
 #dos-wrapper { position: relative; width: 100%; max-width: 1200px; }
 

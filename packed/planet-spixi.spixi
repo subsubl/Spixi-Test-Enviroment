@@ -9,5 +9,5 @@ minUsers = 1
 maxUsers = 2
 protocols = 
 contentUrl = planet-spixi.zip
-checksum = 0c3a452b218b792d1f6a543010475cb0c77423ac664914267104311127ba983d
+checksum = e5b18e50cc96eb437f1cf6df062d5a58db4fc5261374c05910fcfbf1618c2eaa
 contentSize = 12137
