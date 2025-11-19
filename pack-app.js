@@ -90,6 +90,7 @@ async function packApp(appPath, outputDir = null) {
 
     // Get all files
     const allFiles = await getAllFiles(absoluteAppPath);
+    allFiles.sort((a, b) => a.relativePath.localeCompare(b.relativePath));
     console.log(`   Found ${allFiles.length} files`);
 
     // Check for required files
