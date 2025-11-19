@@ -45,6 +45,33 @@ Or pack from the hub UI: Open `http://localhost:8000`, find an app card, then cl
 npm start
 ```
 
+### Save and reuse git commit/push workflow
+
+To make commit + push repeatable you can run a local helper script that stages, commits,
+rebases with `origin/main`, and pushes the changes.
+
+- Windows PowerShell (recommended):
+
+```powershell
+# Prompt: Provide commit message
+npm run commit-and-push:ps1 -- "feat: update UI"
+```
+
+- POSIX (Linux/macOS/WSL) or Git Bash on Windows:
+
+```bash
+npm run commit-and-push -- "feat: update UI"
+```
+
+Tip: If you need to force push (careful, this rewrites history), pass `-- --force` to the bash script or `-Force` to the PowerShell script.
+
+Example:
+
+```bash
+npm run commit-and-push -- "chore: tweak README" --force
+```
+
+
 - View server logs (if started by helper script):
 
 ```powershell
