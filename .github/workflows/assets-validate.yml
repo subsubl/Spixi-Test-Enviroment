@@ -1,0 +1,52 @@
+name: Assets & Server Validation
+
+on:
+  push:
+    paths:
+      - 'static/**'
+      - 'index.tailwind.html'
+      - '.github/workflows/**'
+  pull_request:
+    paths:
+      - 'static/**'
+      - 'index.tailwind.html'
+
+jobs:
+  validate-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Validate prepacked Tailwind exists
+        run: |
+          echo "Checking for static/tailwind.min.css"
+          test -f static/tailwind.min.css || (echo "static/tailwind.min.css not found" && exit 2)
+
+      - name: Start server in background
+        run: |
+          nohup node server.js > server.log 2>&1 &
+          echo "server started, waiting for http://localhost:8000"
+          for i in {1..15}; do
+            if curl -fsS http://localhost:8000 >/dev/null 2>&1; then
+              echo "hub is up"
+              break
+            fi
+            sleep 1
+          done
+          curl -fsS http://localhost:8000 | head -n 1 || true
+
+      - name: Pack sample app (Pong)
+        run: |
+          node pack-app.js ./apps/com.baracuda.spixi.pong ./tests-outputs
+
+      - name: Validate pack outputs
+        run: |
+          ls -la ./tests-outputs || true
+          test -f ./tests-outputs/pong.zip
+          test -f ./tests-outputs/pong.spixi

@@ -1,0 +1,13 @@
+caVersion = 0
+id = com.baracuda.spixi.planetspixi
+publisher = Baracuda
+name = Planet Spixi
+version = 1.0.0
+capabilities = multiUser
+image = planet-spixi.png
+minUsers = 1
+maxUsers = 2
+protocols = 
+contentUrl = planet-spixi.zip
+checksum = 38768f48b1e27991664cd705884fcd6a6aa41f03a61936766a59aa20cfbee7d6
+contentSize = 12137

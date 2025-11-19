@@ -58,11 +58,26 @@ This file provides focused, repository-specific guidance for AI coding agents wo
 ## Common tasks for agents and examples
 - Adding or updating a sample app:
   - Add `apps/<id>/app/index.html` + `appinfo.spixi`; use `spixi-app-sdk.js`; run dev URLs for testing.
+  - **Always** pack the app, run tests, and commit + push when app work is complete (see "Automatic workflow when working on apps").
 - Debugging SDK interactions:
   - Start `npm start`, open the hub, enable Developer Tools, check Console and network logs.
   - For WebSocket/MQTT debugging, use the Go devpack `go run .` and view logs in the terminal.
 - Create new packaging or modify packer behavior:
   - Edit `pack-app.js` to add or change included file patterns; tests: run pack then open the hub or extract from `packed/`.
+
+## Automatic workflow when working on apps
+- When you create a new app under `apps/<id>` or make significant changes to an existing app:
+  1. **Pack the app** with `pack-app.js` into `packed/`:
+    - Example:
+     ```powershell
+     node pack-app.js ./apps/com.baracuda.spixi.planetspixi ./packed
+     ```
+  2. **Run smoke tests and unit tests** to validate packaging and checksums:
+    - Prefer direct `node`/`mocha` invocations if `npm`/`npx` are blocked by execution policy.
+  3. **Commit and push** the changes to GitHub:
+    - Use a concise, descriptive commit message (e.g., `feat: add planet spixi app`, `fix: update pong assets`).
+    - Push to the main branch or the feature branch currently in use.
+- Agents should treat this workflow as the default whenever app code or `appinfo.spixi` is modified, unless the user explicitly says not to commit or push.
 
 ## Agent behavior & conservative rules
 - Prefer using `SpixiAppSdk` and `SpixiTools` APIs to keep code compatible with both the browser mock and the real Spixi client.

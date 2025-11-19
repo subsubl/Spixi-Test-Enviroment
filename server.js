@@ -157,6 +157,12 @@ const mainServer = http.createServer((req, res) => {
         return;
     }
 
+    // Handle Apps listing API
+    if (req.url.startsWith('/api/apps')) {
+        handleAppsApi(req, res);
+        return;
+    }
+
     // Handle pack API (POST)
     if (req.url.startsWith('/api/pack')) {
         handlePackApi(req, res);
@@ -167,6 +173,7 @@ const mainServer = http.createServer((req, res) => {
     let urlPath = req.url.split('?')[0];
 
     // Set default path (use relative paths to avoid absolute path join issues on Windows)
+    // Serve the root `index.html` by default.
     let filePath = urlPath === '/' ? '/index.html' : urlPath;
     // Strip leading slash so path.join(__dirname, ...) doesn't treat it as absolute
     filePath = filePath.replace(/^(\/|\\)/, '');
@@ -420,6 +427,54 @@ function handlePackApi(req, res) {
             res.end(JSON.stringify({ success: false, error: err.message }));
         }
     });
+}
+
+
+// ============================================
+// APPS API - List apps from the apps/ folder
+// ============================================
+function handleAppsApi(req, res) {
+    const appsDir = path.join(__dirname, 'apps');
+    const apps = [];
+
+    try {
+        if (!fs.existsSync(appsDir)) {
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify([]));
+            return;
+        }
+
+        const items = fs.readdirSync(appsDir, { withFileTypes: true });
+        for (const it of items) {
+            if (!it.isDirectory()) continue;
+            const appPath = path.join(appsDir, it.name);
+            const appInfoPath = path.join(appPath, 'appinfo.spixi');
+            const appIndex = path.join(appPath, 'app', 'index.html');
+            if (!fs.existsSync(appInfoPath)) continue;
+
+            const infoText = fs.readFileSync(appInfoPath, 'utf8');
+            const parseKV = (key) => {
+                const m = infoText.match(new RegExp('^' + key + '\\s*=\\s*(.+)$', 'm'));
+                return m && m[1] ? m[1].trim() : null;
+            };
+
+            const name = parseKV('name') || it.name;
+            const id = parseKV('id') || it.name;
+            const version = parseKV('version') || '';
+            const icon = parseKV('icon') || 'icon.png';
+
+            // Determine download base name (best-effort)
+            const baseName = name.trim().replace(/\s+/g, '-').toLowerCase();
+
+            apps.push({ id, name, version, icon: `/apps/${id}/${icon}`, index: `/apps/${id}/app/index.html`, baseName });
+        }
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(apps));
+    } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: err.message }));
+    }
 }
 
 
