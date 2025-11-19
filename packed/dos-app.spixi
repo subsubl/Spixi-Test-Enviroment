@@ -9,5 +9,5 @@ minUsers = 1
 maxUsers = 1
 protocols = 
 contentUrl = dos-app.zip
-checksum = 00337d9a023a8b0f91707f5e18504af88be5df8e3adfc5cf63c922bb1c26fe99
-contentSize = 10654
+checksum = 91e77a82908c6dceb609d380a300d68968a8dcfb1ca19487acfd7f1969f394e0
+contentSize = 12631
