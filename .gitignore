@@ -1,15 +1,27 @@
 
 # Logs
+# Node
+node_modules/
+
+# Packed artifacts (optional)
+packed/
+
+# Logs
 *.log
 server*.log
 npm-debug.log*
 
-
-
 # Temporary files
 .DS_Store
-thumbs.db
+Thumbs.db
 
 # Editor settings
 .vscode/
 .idea/
+
+# Env files
+.env
+
+# Build outputs
+dist/
+build/
