@@ -1,7 +1,7 @@
 caVersion = 0
-id = com.baracuda.spixi.contrarun2
+id = com.baracuda.spixi.planetspixi
 publisher = Baracuda
-name = Contra Run 2
+name = Planet Spixi
 version = 1.0.0
 capabilities = multiUser
 maxUsers = 2

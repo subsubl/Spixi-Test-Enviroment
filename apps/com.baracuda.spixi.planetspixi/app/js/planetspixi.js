@@ -1,4 +1,4 @@
-// Contra Run 2 - Advanced Run & Gun Game
+// Planet Spixi - Advanced Run & Gun Game
 // Copyright (C) 2025 Baracuda
 
 // Game Constants
@@ -679,8 +679,8 @@ function gameOver() {
     gameState.gameStarted = false;
     
     elements.gameOver.style.display = 'block';
-    elements.gameOverTitle.textContent = 'MISSION FAILED';
-    elements.gameOverText.textContent = 'All soldiers eliminated';
+    elements.gameOverTitle.textContent = 'PLANET DESTROYED';
+    elements.gameOverText.textContent = 'All heroes eliminated';
     
     if (gameState.localPlayer) {
         elements.finalP1Score.textContent = gameState.localPlayer.score;
@@ -879,7 +879,7 @@ elements.exitBtn.addEventListener('click', () => {
 
 // Initialize
 window.onload = function() {
-    console.log('Contra Run 2 loaded');
+    console.log('Planet Spixi loaded');
     initAnalogStick();
     SpixiAppSdk.fireOnLoad();
 };
