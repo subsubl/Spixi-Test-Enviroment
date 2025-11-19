@@ -13,6 +13,11 @@ const items = fs.readdirSync(appsDir, { withFileTypes: true });
 
 for (const it of items) {
   if (!it.isDirectory()) continue;
+  // Ensure icon conversions for apps that provide SVGs
+  try {
+    const conv = spawnSync('node', [path.join(__dirname, 'generate-icons.js')], { stdio: 'inherit' });
+    if (conv.error) console.warn('Icon convert failed:', conv.error);
+  } catch (e) {}
   const appPath = path.join(appsDir, it.name);
   console.log(`\n----- Packing ${it.name} -----`);
   const r = spawnSync('node', [path.join(__dirname, '..', 'pack-app.js'), appPath, outputDir], { stdio: 'inherit' });
