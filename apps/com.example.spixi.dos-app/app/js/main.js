@@ -6,6 +6,8 @@ window.onload = () => {
     const bundleInput = document.getElementById('bundle-url');
 
     let props = null;
+        let repeatInterval = null;
+        let lastKey = null;
 
     async function createDos(bundleUrl, opts = {}) {
         if (!window.Dos) {
@@ -36,10 +38,48 @@ window.onload = () => {
                 props = maybe;
             }
             console.log('js-dos props', props);
+            // Focus the outer container so keys go to emulator
+            dosContainer.focus();
+            // after player is created -> resize canvas to container size
+            requestAnimationFrame(() => resizeDos());
         } catch (err) {
             console.error('Failed to start js-dos', err);
             dosContainer.innerText = 'Failed to start js-dos: ' + (err && err.message ? err.message : err);
         }
+    }
+
+    // Resize behavior: set canvas element to fill the container and keep it responsive
+    function resizeDos() {
+        const canvas = dosContainer.querySelector('canvas') || dosContainer.querySelector('video') || null;
+        if (!canvas) return;
+        // Ensure the in-place element covers the whole container
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        canvas.style.objectFit = 'contain';
+        // If the props provide a resize method, call it (v8 might expose API)
+        if (props && typeof props.resize === 'function') {
+            try { props.resize(); } catch (e) { /* noop */ }
+        }
+    }
+
+    // Keyboard dispatch helper: send key events to the emulator container
+    function dispatchKeyToDos(key, options = {}) {
+        const target = dosContainer;
+        const code = options.code || key;
+        const keyCode = options.keyCode || (key && key.length === 1 ? key.charCodeAt(0) : 0);
+
+        ['keydown', 'keypress', 'keyup'].forEach((type, i) => {
+            const ev = new KeyboardEvent(type, {
+                key: key,
+                code: code,
+                keyCode: keyCode,
+                which: keyCode,
+                bubbles: true,
+                cancelable: true
+            });
+            target.dispatchEvent(ev);
+            window.dispatchEvent(ev);
+        });
     }
 
     loadDiggerBtn && loadDiggerBtn.addEventListener('click', () => {
@@ -66,6 +106,59 @@ window.onload = () => {
             dosContainer.innerText = 'Stopped';
         }
     });
+
+    // Keep canvas resizing with viewport
+    window.addEventListener('resize', () => requestAnimationFrame(resizeDos));
+
+    // On-screen keypad: map to Arrow keys + Enter/Escape
+    const keypad = document.getElementById('dos-keypad');
+    const input = document.getElementById('dos-keyboard-input');
+
+    function startKeyRepeat(keyName) {
+        // send initial press
+        dispatchKeyToDos(keyName);
+        lastKey = keyName;
+        repeatInterval = setInterval(() => dispatchKeyToDos(keyName), 150);
+    }
+    function stopKeyRepeat() {
+        if (repeatInterval) clearInterval(repeatInterval);
+        repeatInterval = null;
+        lastKey = null;
+    }
+
+    // Attach pointer/touch handlers for keys
+    keypad.querySelectorAll('button[data-key]').forEach(btn => {
+        const keyName = btn.getAttribute('data-key');
+        btn.addEventListener('mousedown', (e) => { e.preventDefault(); startKeyRepeat(keyName); });
+        btn.addEventListener('touchstart', (e) => { e.preventDefault(); startKeyRepeat(keyName); });
+        ['mouseup', 'mouseleave'].forEach(ev => btn.addEventListener(ev, stopKeyRepeat));
+        ['touchend', 'touchcancel'].forEach(ev => btn.addEventListener(ev, stopKeyRepeat));
+        // single click
+        btn.addEventListener('click', (e) => { e.preventDefault(); dispatchKeyToDos(keyName); });
+    });
+
+    // Toggle mobile keyboard pop-up: focus the hidden input which triggers soft keyboard
+    const kbToggle = document.getElementById('keyboard-toggle');
+    kbToggle.addEventListener('click', () => {
+        // If already focused, blur it
+        if (document.activeElement === input) { input.blur(); } else { input.focus(); }
+    });
+
+    // When the hidden input receives actual typed characters, forward them as key events
+    input.addEventListener('input', (ev) => {
+        const val = input.value || '';
+        // Send each typed character, then clear the input
+        if (val.length > 0) {
+            for (const ch of val) {
+                dispatchKeyToDos(ch);
+            }
+        }
+        input.value = '';
+    });
+
+    // Focus the hidden input when the dos container is tapped on mobile to bring up keyboard
+    dosContainer.addEventListener('touchstart', (e) => { input.focus(); }, { passive: true });
+    dosContainer.addEventListener('click', (e) => { dosContainer.focus(); });
 
     // Auto-load the 'terminal' bundle when the page is opened (default)
     // We'll load a lightweight sample bundle but theme will be dark

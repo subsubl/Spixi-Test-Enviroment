@@ -13,9 +13,12 @@ h1 {
     margin-bottom: 20px;
 }
 
+/* Main DOS area - responsive to viewport */
+#dos-wrapper { position: relative; width: 100%; max-width: 1200px; }
+
 #dos-container {
-    width: 640px;
-    height: 400px;
+    width: 100%;
+    height: calc(100vh - 240px); /* leave space for header / controls on small screens */
     border: 1px solid rgba(255,255,255,0.06);
     box-shadow: 0 0 20px rgba(0,0,0,0.5);
     background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
@@ -23,3 +26,36 @@ h1 {
 
 .btn { background: linear-gradient(90deg, #2b2b2b, #3b3b3b); color: #f0f0f0; border: 1px solid rgba(255,255,255,0.06); padding: .5rem 1rem; border-radius: .5rem; cursor:pointer }
 .btn:hover { transform: translateY(-2px); }
+
+/* On-screen keypad / controls */
+.dos-keypad {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    display: flex;
+    gap: 8px;
+    background: rgba(0,0,0,0.4);
+    border-radius: 10px;
+    padding: 8px;
+    align-items: center;
+    z-index: 40;
+}
+.dos-keypad .kbtn {
+    background: rgba(255,255,255,0.06);
+    color: #eee;
+    border: 0;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 16px;
+}
+.dos-keypad .kbtn:active { transform: scale(.98); }
+.dos-keypad .arrows { display:flex; flex-direction:column; align-items:center; gap:6px }
+.dos-keypad .hrow { display:flex; gap:6px }
+.dos-keypad .actions { display:flex; flex-direction:column; gap:6px; }
+
+/* Larger keypad on narrow screens */
+@media (max-width: 640px) {
+    #dos-container { height: calc(100vh - 150px); }
+    .dos-keypad { right: 8px; bottom: 8px; }
+    .dos-keypad .kbtn { padding: 12px 16px; font-size: 18px; }
+}
