@@ -8,6 +8,7 @@
   },
   "scripts": {
     "pack": "node pack-app.js",
+    "pack-all": "node scripts/pack-all.js",
     "commit-and-push:ps1": "powershell -ExecutionPolicy Bypass -File scripts\\git-commit-and-push.ps1",
     "commit-and-push": "bash scripts/git-commit-and-push.sh",
     "start": "node server.js",

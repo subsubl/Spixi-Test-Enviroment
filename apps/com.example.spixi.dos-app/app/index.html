@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOS App</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- js-dos latest styles -->
+    <link rel="stylesheet" href="https://v8.js-dos.com/latest/js-dos.css">
+</head>
+<body>
+    <h1>DOS App</h1>
+    <div id="dos-container"></div>
+    <div style="margin-top: 12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:center;">
+        <select id="sample-bundles" style="padding:.5rem;border-radius:.375rem;border:1px solid #ccc;background:#fff;color:#111">
+            <option value="https://v8.js-dos.com/bundles/digger.jsdos">Digger (js-dos sample)</option>
+            <option disabled>---- community bundles can be added below ----</option>
+        </select>
+        <button id="load-selected" class="btn">Load Selected</button>
+        <label style="display:inline-flex;align-items:center;gap:8px;color:#cfd8e3;margin-left:10px"><input id="auto-start" type="checkbox" checked /> Auto-start</label>
+        <button id="stop-dos" class="btn">Stop</button>
+        <input id="bundle-url" placeholder="Enter custom .jsdos bundle URL" style="width:360px;padding:.5rem;border-radius:.375rem;border:1px solid #ccc;background:#fff;color:#111" />
+        <button id="load-url" class="btn">Load URL</button>
+    </div>
+    <!-- js-dos v8 (uses bundles) -->
+    <script src="https://v8.js-dos.com/latest/js-dos.js"></script>
+    <script>
+        // Set global js-dos theme default to dark; js-dos will pick it when Dos() is called.
+        window.jsDosDefaultTheme = 'dark';
+    </script>
+    <script src="js/main.js"></script>
+</body>
+</html>

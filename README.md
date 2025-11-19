@@ -22,6 +22,19 @@ cd C:\Users\User\Spixi-Test-Enviroment
 npm install
 npm start
 ```
+ 
+ If PowerShell blocks `npm` because scripts are disabled, use the included helper:
+
+ ```powershell
+ # Run a .cmd wrapper that uses npm.cmd (avoids PowerShell script policy issues)
+ .\scripts\npm-install.cmd
+ npm start
+ ```
+You can also use the wrapper to start the server safely from PowerShell:
+
+```powershell
+.\scripts\npm-start.cmd
+```
 
 - Open the main UI: `http://localhost:8000`
 - Dev server (to load a specific app): `http://localhost:8081/?app=<appId>` (example: `?app=com.baracuda.spixi.pong`)
@@ -43,6 +56,27 @@ Or pack from the hub UI: Open `http://localhost:8000`, find an app card, then cl
 
 ```powershell
 npm start
+
+## Repack all apps
+
+If you update app content and want to repack all apps at once, there are helpers:
+
+PowerShell:
+
+```powershell
+# uses Node to run pack-app.js for each folder under apps/
+.\scripts\pack-all.ps1
+```
+
+CMD (Windows) or cross-shell:
+
+```powershell
+.\scripts\pack-all.cmd
+# or using npm script:
+npm run pack-all
+```
+
+This saves each app's `.zip`, `.spixi`, and `*.png` (if present) into `packed/`.
 ```
 
 ### Save and reuse git commit/push workflow

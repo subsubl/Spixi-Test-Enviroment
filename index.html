@@ -103,6 +103,34 @@
         .icon-shimmer {
             position: relative;
             overflow: hidden;
+            /* Make icons thumbnail-sized by default so grid is visible */
+            width: 3rem; /* 48px */
+            height: 3rem; /* 48px */
+            min-width: 3rem;
+            min-height: 3rem;
+        }
+
+        /* Hero nav styles */
+        .hero-nav { text-align: center; }
+        .hero-menu-list { list-style: none; padding: 0; margin: 0; display: inline-flex; gap: 0.5rem; align-items: center; }
+        .hero-menu-item { display: inline-flex; padding: 0.5rem 1rem; border-radius: 9999px; background: rgba(255,255,255,0.03); color: #cfe6ff; text-decoration: none; font-weight: 700; border: 1px solid rgba(255,255,255,0.03); transition: all .12s ease; }
+        .hero-menu-item:hover { transform: translateY(-2px); background: rgba(255,255,255,0.06); border-color: rgba(59,130,246,0.3); color: #ffffff; }
+
+        /* App grid helper - fallback for limited CSS setups (ensures 4 up on large screens) */
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 1.5rem; /* near Tailwind gap-6 */
+        }
+
+        /* small screens - 2 columns */
+        @media (min-width: 640px) {
+            .app-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* large screens - exactly 4 columns */
+        @media (min-width: 1024px) {
+            .app-grid { grid-template-columns: repeat(4, 1fr); }
         }
         
         .icon-shimmer::after {
@@ -131,6 +159,16 @@
     <header class="sticky top-0 z-50 nav-glass">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
+                <nav class="hidden md:flex items-center space-x-6">
+                    <ul class="flex items-center space-x-3">
+                        <li><a href="/" class="hero-menu-item">Home</a></li>
+                        <li><a href="/mini-apps-sdk/README.md" class="hero-menu-item">Developers</a></li>
+                        <li><a href="/app-packer/index.html" class="hero-menu-item">App-Packer</a></li>
+                        <li><a href="#apps" class="hero-menu-item">Apps</a></li>
+                        <li><a href="#faq" class="hero-menu-item">FAQ</a></li>
+                    </ul>
+                </nav>
+
                 <div class="flex items-center space-x-3">
                     <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 p-0.5 shadow-xl">
                         <div class="w-full h-full rounded-2xl bg-gray-900 flex items-center justify-center">
@@ -178,20 +216,9 @@
                         <br />
                         <span class="text-white">Spixi Mini Apps</span>
                     </h1>
-                    <p class="text-lg sm:text-xl text-gray-300 mb-12 max-w-2xl mx-auto leading-relaxed">Experience instant app deployment with hot-reload. Switch seamlessly between development and production environments.</p>
-                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <a href="http://localhost:8081/?app=com.baracuda.spixi.planetspixi" 
-                           class="group relative px-8 py-4 btn-primary rounded-xl font-bold text-white w-full sm:w-auto overflow-hidden">
-                            <span class="relative z-10 flex items-center justify-center space-x-2">
-                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                </svg>
-                                <span>Launch Planet Spixi</span>
-                            </span>
-                        </a>
-                        <a href="http://localhost:8081/?app=com.baracuda.spixi.pong" 
-                           class="px-8 py-4 rounded-xl font-bold text-white border-2 border-gray-600 hover:border-blue-500 bg-gray-800/50 hover:bg-gray-700/50 backdrop-blur-sm transition-all w-full sm:w-auto">ðŸ® Run Pong</a>
-                    </div>
+                    <p class="text-lg sm:text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">Experience instant app deployment with hot-reload. Switch seamlessly between development and production environments.</p>
+
+                    <!-- Top header menu moved into header (see above) -->
                 </div>
             </div>
         </section>
@@ -209,7 +236,8 @@
                         </div>
                     </div>
                 </div>
-                <div id="apps" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+                <!-- Make the hub show 4 apps in a row on large screens (uses .app-grid helper) -->
+                <div id="apps" class="app-grid"></div>
             </div>
         </section>
     </main>
@@ -229,6 +257,18 @@
             </div>
         </div>
     </footer>
+
+    <!-- FAQ Anchor for quick links in hero menu -->
+    <section id="faq" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="text-center max-w-3xl mx-auto">
+            <h2 class="text-2xl font-bold text-white mb-3">FAQ</h2>
+            <p class="text-gray-400 mb-6">Quick answers to common developer questions.</p>
+            <div class="text-left bg-gray-900/40 p-6 rounded-xl border border-gray-800/30">
+                <h3 class="text-lg font-semibold text-white">How do I pack an app?</h3>
+                <p class="text-gray-400">Use the App Packer at <a href="/app-packer/index.html" class="text-blue-400">/app-packer</a> or run <code>node pack-app.js &lt;app_path&gt; &lt;output_dir&gt;</code>.</p>
+            </div>
+        </div>
+    </section>
 
     <script>
     (function(){
@@ -264,15 +304,17 @@
         art.className = 'app-card glass-card rounded-2xl p-6 flex flex-col h-full group';
 
         const iconWrapper = document.createElement('div');
-        iconWrapper.className = 'mb-5';
+        iconWrapper.className = 'mb-3';
         
         const iconContainer = document.createElement('div');
-        iconContainer.className = 'icon-shimmer w-20 h-20 rounded-3xl bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20 border border-blue-400/30 flex items-center justify-center text-5xl overflow-hidden relative group-hover:scale-110 transition-transform duration-300';
+        // use smaller thumbnail size for icons so more cards display
+        iconContainer.className = 'icon-shimmer w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20 border border-blue-400/30 flex items-center justify-center text-xl overflow-hidden relative group-hover:scale-110 transition-transform duration-300';
         
         const img = document.createElement('img');
         img.src = app.icon;
         img.alt = app.name + ' icon';
-        img.className = 'w-full h-full object-cover rounded-3xl';
+        img.className = 'w-full h-full object-cover rounded-2xl';
+        img.loading = 'lazy';
         img.onerror = function(){ 
           this.style.display = 'none';
           const fallbackText = document.createElement('div');

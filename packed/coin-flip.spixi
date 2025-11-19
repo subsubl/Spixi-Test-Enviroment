@@ -9,5 +9,5 @@ minUsers = 2
 maxUsers = 2
 protocols = 
 contentUrl = coin-flip.zip
-checksum = 2be4496523b32e5665a3a3bdd614c95bdc3705aba20276f0e1504e3ebf2d4805
+checksum = 38591cef892c9c503fa43aa57e4617f488a07a025bc22f83ea2869cf3d7e630e
 contentSize = 11072
