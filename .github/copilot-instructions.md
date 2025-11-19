@@ -53,7 +53,17 @@ This file provides focused, repository-specific guidance for AI coding agents wo
 - `POST /api/pack` — server API that invokes the packer and returns `{ success, baseName, zip, spixi }` where `zip` and `spixi` are paths relative to the repo root (use to trigger downloads)
 - `mini-apps-sdk/spixi-app-sdk.js` and `mini-apps-sdk/spixi-tools.js` — canonical SDK surface used by all apps
 - `apps/<appId>/app/js` — app logic; look for SDK calls and handler overrides
+- `apps/<appId>/app/js` — app logic; look for SDK calls and handler overrides
+  - NOTE: The DOS app at `apps/com.example.spixi.dos-app` contains an embedded js-dos v8 integration. Changes to keyboard, resizing, or mobile behavior appear in `app/js/main.js` and `app/index.html`.
 - `Go_Spixi_devPack/**` — optional server implementation if you need advanced simulation
+
+## js-dos / DOS App notes (docs for agents)
+
+- `apps/com.example.spixi.dos-app` contains a lightweight js-dos (v8) emulator integration used for testing DOS games and terminal-like content. When editing this app consider the following: 
+  - The container is responsive and should `resize` to the viewport. Use `#dos-wrapper` / `#dos-container` and prefer CSS `width:100%` with `height: calc(100vh - <header controls>);` so developers can preview different screen sizes and the canvas scales appropriately.
+  - A hidden `input#dos-keyboard-input` is used to trigger the mobile soft keyboard (Android/iOS) during user gestures; use it when you need typed input forwarded to the emulator. This is necessary to open the mobile keyboard reliably because browsers require user interaction.
+  - An on-screen keypad `#dos-keypad` is part of the test app and dispatches keyboard events to the DOS emulator. The keypad maps to `ArrowUp/Left/Down/Right`, `Enter` and `Escape` and includes repeat behavior when keys are held down. When modifying code, ensure `dispatchKeyToDos` and repeat timers are cleaned up when the emulator unloads.
+  - The emulator receives `KeyboardEvent` events. If a game does not respond to synthetic DOM keyboard events, check for alternative js-dos-provided input APIs on the `props` object returned from `Dos()` (the integration code may expose `props.write`, `props.send`, or `props.resize`). Prefer direct `props.*` calls if stable and available.
 
 ## Common tasks for agents and examples
 - Adding or updating a sample app:
@@ -62,6 +72,12 @@ This file provides focused, repository-specific guidance for AI coding agents wo
 - Debugging SDK interactions:
   - Start `npm start`, open the hub, enable Developer Tools, check Console and network logs.
   - For WebSocket/MQTT debugging, use the Go devpack `go run .` and view logs in the terminal.
+
+  - For the DOS app specifically: after changes to `app/js/main.js` or `app/index.html`, validate the following locally with the dev server:
+    1. The DOS canvas resizes correctly (open in desktop & mobile widths).
+    2. The on-screen keypad triggers `keydown`/`keyup` in the game — hold to verify repeat behavior.
+    3. On mobile, user gesture triggers `#dos-keyboard-input` focus (test with `⌨️` button) and text is forwarded correctly.
+    4. Re-pack the app `node pack-app.js ./apps/com.example.spixi.dos-app ./packed` and ensure the resulting `.spixi` contains the new files.
 - Create new packaging or modify packer behavior:
   - Edit `pack-app.js` to add or change included file patterns; tests: run pack then open the hub or extract from `packed/`.
 
@@ -84,6 +100,7 @@ This file provides focused, repository-specific guidance for AI coding agents wo
 - Avoid calling `location.href = "ixian:..."` directly in code; rely on `SpixiAppSdk.*` wrapper.
 - When modifying `pack-app.js`, keep `appinfo.spixi` parsing backward-compatible (case/spacing tolerant). The current parser accepts `key = value` lines.
 - Keep the hub and dev servers backward-compatible: `server.js` is intentionally minimal and may be used in CI; do not introduce heavy runtime dependencies.
+  - Do not attempt to open mobile keyboards programmatically without user gestures — browsers block this on many platforms. Use the visible keyboard toggle or a touch event on the DOS area.
 
 ---
 If you'd like, I can:
