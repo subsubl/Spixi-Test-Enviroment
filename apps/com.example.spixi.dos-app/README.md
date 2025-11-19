@@ -20,6 +20,21 @@ This sample app demonstrates integration of the js-dos player (v8) in the Spixi 
 	- Digger: https://v8.js-dos.com/bundles/digger.jsdos
 
 	For more bundles and guidance, see: https://js-dos.com/jsdos-bundle.html
+
+	Icon PNG generation
+	-------------------
+	The app uses a single 512x512 `icon.png` generated from `icon.svg` when you run the generator. This keeps the repository lightweight while still producing a PNG for packaging. To re-generate the PNG:
+
+	```powershell
+	# Make sure dependencies are installed
+	cmd /c "npm install"
+
+	# Generate PNGs for apps with an icon.svg (512x512)
+	npm run generate-icons
+
+	# Repack the apps (optional)
+	npm run pack-all
+	```
 - You can also enter a custom `js-dos` bundle URL and click `Load URL`.
 - Click `Stop` to stop the player and free resources.
 
