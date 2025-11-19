@@ -156,6 +156,15 @@ window.onload = () => {
         input.value = '';
     });
 
+        // Forward non-printable key presses from the soft keyboard to the emulator
+        input.addEventListener('keydown', (ev) => {
+            // Forward keydown and keyup events for non-character keys
+            if (ev.key && ev.key.length > 1) {
+                dispatchKeyToDos(ev.key);
+                ev.preventDefault();
+            }
+        });
+
     // Focus the hidden input when the dos container is tapped on mobile to bring up keyboard
     dosContainer.addEventListener('touchstart', (e) => { input.focus(); }, { passive: true });
     dosContainer.addEventListener('click', (e) => { dosContainer.focus(); });
