@@ -110,63 +110,9 @@ window.onload = () => {
     // Keep canvas resizing with viewport
     window.addEventListener('resize', () => requestAnimationFrame(resizeDos));
 
-    // On-screen keypad: map to Arrow keys + Enter/Escape
-    const keypad = document.getElementById('dos-keypad');
-    const input = document.getElementById('dos-keyboard-input');
-
-    function startKeyRepeat(keyName) {
-        // send initial press
-        dispatchKeyToDos(keyName);
-        lastKey = keyName;
-        repeatInterval = setInterval(() => dispatchKeyToDos(keyName), 150);
-    }
-    function stopKeyRepeat() {
-        if (repeatInterval) clearInterval(repeatInterval);
-        repeatInterval = null;
-        lastKey = null;
-    }
-
-    // Attach pointer/touch handlers for keys
-    keypad.querySelectorAll('button[data-key]').forEach(btn => {
-        const keyName = btn.getAttribute('data-key');
-        btn.addEventListener('mousedown', (e) => { e.preventDefault(); startKeyRepeat(keyName); });
-        btn.addEventListener('touchstart', (e) => { e.preventDefault(); startKeyRepeat(keyName); });
-        ['mouseup', 'mouseleave'].forEach(ev => btn.addEventListener(ev, stopKeyRepeat));
-        ['touchend', 'touchcancel'].forEach(ev => btn.addEventListener(ev, stopKeyRepeat));
-        // single click
-        btn.addEventListener('click', (e) => { e.preventDefault(); dispatchKeyToDos(keyName); });
-    });
-
-    // Toggle mobile keyboard pop-up: focus the hidden input which triggers soft keyboard
-    const kbToggle = document.getElementById('keyboard-toggle');
-    kbToggle.addEventListener('click', () => {
-        // If already focused, blur it
-        if (document.activeElement === input) { input.blur(); } else { input.focus(); }
-    });
-
-    // When the hidden input receives actual typed characters, forward them as key events
-    input.addEventListener('input', (ev) => {
-        const val = input.value || '';
-        // Send each typed character, then clear the input
-        if (val.length > 0) {
-            for (const ch of val) {
-                dispatchKeyToDos(ch);
-            }
-        }
-        input.value = '';
-    });
-
-        // Forward non-printable key presses from the soft keyboard to the emulator
-        input.addEventListener('keydown', (ev) => {
-            // Forward keydown and keyup events for non-character keys
-            if (ev.key && ev.key.length > 1) {
-                dispatchKeyToDos(ev.key);
-                ev.preventDefault();
-            }
-        });
-
-    // Focus the hidden input when the dos container is tapped on mobile to bring up keyboard
-    dosContainer.addEventListener('touchstart', (e) => { input.focus(); }, { passive: true });
+    // On-screen keypad and hidden soft keyboard input have been removed to prevent mobile popups and overlays.
+    // Keep dos container focus for desktop keyboard events
+    dosContainer.addEventListener('click', (e) => { dosContainer.focus(); });
     dosContainer.addEventListener('click', (e) => { dosContainer.focus(); });
 
     // Auto-load the 'terminal' bundle when the page is opened (default)

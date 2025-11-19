@@ -61,8 +61,8 @@ This file provides focused, repository-specific guidance for AI coding agents wo
 
 - `apps/com.example.spixi.dos-app` contains a lightweight js-dos (v8) emulator integration used for testing DOS games and terminal-like content. When editing this app consider the following: 
   - The container is responsive and should `resize` to the viewport. Use `#dos-wrapper` / `#dos-container` and prefer CSS `width:100%` with `height: calc(100vh - <header controls>);` so developers can preview different screen sizes and the canvas scales appropriately.
-  - A hidden `input#dos-keyboard-input` is used to trigger the mobile soft keyboard (Android/iOS) during user gestures; use it when you need typed input forwarded to the emulator. This is necessary to open the mobile keyboard reliably because browsers require user interaction.
-  - An on-screen keypad `#dos-keypad` is part of the test app and dispatches keyboard events to the DOS emulator. The keypad maps to `ArrowUp/Left/Down/Right`, `Enter` and `Escape` and includes repeat behavior when keys are held down. When modifying code, ensure `dispatchKeyToDos` and repeat timers are cleaned up when the emulator unloads.
+  - A hidden `input#dos-keyboard-input` was previously used to trigger the mobile soft keyboard (Android/iOS) during user gestures, and `#dos-keypad` was an on-screen keypad used for simulated key input. These were removed to avoid accidental popups and overlayed controls causing UX issues.
+  - If these features are needed later, re-add `#dos-keyboard-input` and `#dos-keypad` and coordinate with UX to ensure a user-control enables the keyboard (e.g., a toggle in settings). When modifying code, ensure `dispatchKeyToDos` and repeat timers are cleaned up when the emulator unloads.
   - The emulator receives `KeyboardEvent` events. If a game does not respond to synthetic DOM keyboard events, check for alternative js-dos-provided input APIs on the `props` object returned from `Dos()` (the integration code may expose `props.write`, `props.send`, or `props.resize`). Prefer direct `props.*` calls if stable and available.
 
 ## Common tasks for agents and examples

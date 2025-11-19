@@ -14,24 +14,7 @@
         <div id="dos-container" class="dos-container" tabindex="0" aria-label="DOS emulator"></div>
 
         <!-- Soft keyboard trigger (hidden) - focusing this will pop up mobile keyboards -->
-        <input id="dos-keyboard-input" type="text" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="position:absolute;left:-9999px;top:-9999px;opacity:0" />
-
-        <!-- On-screen keypad for mobile/desktop arrows & actions -->
-        <div id="dos-keypad" class="dos-keypad" aria-hidden="false">
-            <div class="arrows">
-                <button data-key="ArrowUp" class="kbtn">↑</button>
-                <div class="hrow">
-                    <button data-key="ArrowLeft" class="kbtn">←</button>
-                    <button data-key="ArrowDown" class="kbtn">↓</button>
-                    <button data-key="ArrowRight" class="kbtn">→</button>
-                </div>
-            </div>
-            <div class="actions">
-                <button data-key="Enter" class="kbtn">Enter</button>
-                <button data-key="Escape" class="kbtn">Esc</button>
-                <button id="keyboard-toggle" class="kbtn">⌨️</button>
-            </div>
-        </div>
+        <!-- Disabled: previously had a hidden input and overlay keypad to trigger mobile keyboards; removed to prevent popups -->
     </div>
     <div style="margin-top: 12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:center;">
         <select id="sample-bundles" style="padding:.5rem;border-radius:.375rem;border:1px solid #ccc;background:#fff;color:#111">
